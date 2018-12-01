@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------*\
-|  Definicao de grafos com UM peso (int)                              |
+|  Definicao de grafos com DOIS pesos (int)                           |
 |     Assume-se que os vertices sao numerados de 1 a |V|.             |
 |                                                                     |
 |   A.P.Tomas, CC2001 (material para prova pratica), DCC-FCUP, 2017   |
@@ -10,23 +10,33 @@ import java.util.LinkedList;
 
 class Arco {
     int no_final;
-    int valor;
-
-    Arco(int fim, int v){
+    int valor0;
+    int valor1;
+    
+    Arco(int fim, int v0, int v1){
 	no_final = fim;
-	valor = v;
+	valor0  = v0;
+	valor1 = v1;
     }
 
     int extremo_final() {
 	return no_final;
     }
 
-    int valor_arco() {
-	return valor;
+    int valor0_arco() {
+	return valor0;
     }
 
-    void novo_valor(int v) {
-	valor = v;
+    int valor1_arco() {
+	return valor1;
+    }
+
+    void novo_valor0(int v) {
+	valor0 = v;
+    }
+
+    void novo_valor1(int v) {
+	valor1 = v;
     }
 }
 
@@ -41,11 +51,11 @@ class No {
 }
 
 
-class Grafo {
+class Grafo2 {
     No verts[];
     int nvs, narcos;
-
-    public Grafo(int n) {
+			
+    public Grafo2(int n) {
 	nvs = n;
 	narcos = 0;
 	verts  = new No[n+1];
@@ -53,7 +63,7 @@ class Grafo {
 	    verts[i] = new No();
         // para vertices numerados de 1 a n (posicao 0 nao vai ser usada)
     }
-
+    
     public int num_vertices(){
 	return nvs;
     }
@@ -65,9 +75,9 @@ class Grafo {
     public LinkedList<Arco> adjs_no(int i) {
 	return verts[i].adjs;
     }
-
-    public void insert_new_arc(int i, int j, int valor_ij){
-	verts[i].adjs.addFirst(new Arco(j,valor_ij));
+    
+    public void insert_new_arc(int i, int j, int valor0, int valor1){
+	verts[i].adjs.addFirst(new Arco(j,valor0,valor1));
         narcos++;
     }
 

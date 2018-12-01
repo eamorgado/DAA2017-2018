@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 class Arco {
     int no_final;
-    
+
     Arco(int fim){
 	no_final = fim;
     }
@@ -34,7 +34,7 @@ class No {
 class Grafo0 {
     No verts[];
     int nvs, narcos;
-			
+
     public Grafo0(int n) {
 	nvs = n;
 	narcos = 0;
@@ -43,7 +43,7 @@ class Grafo0 {
 	    verts[i] = new No();
         // para vertices numerados de 1 a n (posicao 0 nao vai ser usada)
     }
-    
+
     public int num_vertices(){
 	return nvs;
     }
@@ -55,7 +55,7 @@ class Grafo0 {
     public LinkedList<Arco> adjs_no(int i) {
 	return verts[i].adjs;
     }
-    
+
     public void insert_new_arc(int i, int j){
 	verts[i].adjs.addFirst(new Arco(j));
         narcos++;

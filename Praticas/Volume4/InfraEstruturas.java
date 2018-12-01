@@ -12,31 +12,35 @@ import java.util.*;
 |           einicial efinal largura comprimento altura        |
 |    OUTPUT:                                                  |
 |        - Numero de ramos onde a caixa pode passar           |
-|Nota: neste caso nem preciso de criar grafo                  |
+|Nota:  -neste caso nem preciso de criar grafo                |
+|       -Quando nos dão valor máximo não significa o valor do |
+|        ramo em questão mas sim um limite para o seu valor ou|
+|        seja desde que esse valor n seja inferior ao         |
+|         lmin/cmin/amin o ramo é válido                      |
 */
 
 public class InfraEstruturas{
   public static Scanner in = new Scanner(System.in);
   public static void contaCaminhos(){
-    //----Valores antes de Leitura rede
+    //Valores antes de Leitura rede
     int n,lmin,lmax,cmin,cmax,amin,origem,destino,caminhos=0;
-    //----Valores de rede
+    //Valores de rede
     int ei,ef,t_lmax,t_cmax,t_amax;
-    //----Leitura L1-L2-L3-------------
+    //Leitura L1-L2-L3
     n=in.nextInt();
     lmin=in.nextInt(); lmax=in.nextInt();
     cmin=in.nextInt();  cmax=in.nextInt(); amin=in.nextInt();
     origem=in.nextInt(); destino=in.nextInt();
-    //---------Inicia Leitura grafo------
+    //Inicia Leitura grafo
     ei=in.nextInt();
     while(ei!=-1){
       ef=in.nextInt();
       t_lmax=in.nextInt(); t_cmax=in.nextInt(); t_amax=in.nextInt();
-      if(t_lmax>=lmin && t_lmax<=lmax && t_cmax>=cmin && t_cmax<=cmax && t_amax>=amin)
+      //maximos de ramos atingem minorante de intervalos
+      if(t_lmax>=lmin && t_cmax>=cmin && t_amax>=amin)
         caminhos++;
       ei=in.nextInt();
     }
-    //---Retorna caminhos---------------
     System.out.println(caminhos);
     return;
   }

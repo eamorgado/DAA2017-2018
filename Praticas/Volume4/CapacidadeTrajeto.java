@@ -1,5 +1,5 @@
 import java.util.*;
-/* Estado:
+/* Estado: Terminado
 |  MooshackDAA- Vol 4- Prob D - CapacidadeTrajeto (2018)      |
 |     Objetivo: A partir de percurso proposto, se for caminho |
 |            de origem a destino,indicar a largura maxima     |
@@ -14,7 +14,76 @@ import java.util.*;
 |           #nospercurso sequencia de nos                     |
 |    OUTPUT:                                                  |
 |        - Largura maxima para percurso válido                |
+|Nota: quando dizem largura maxima é a largura que satistaz   |
+|       tds os ramos do percurso, logo a minima do perc       |
 */
+
+class Arco {
+    int no_final;
+    int valor;
+
+    Arco(int fim, int v){
+	no_final = fim;
+	valor = v;
+    }
+
+    int extremo_final() {
+	return no_final;
+    }
+
+    int valor_arco() {
+	return valor;
+    }
+
+    void novo_valor(int v) {
+	valor = v;
+    }
+}
+class No {
+    //int label;
+    LinkedList<Arco> adjs;
+
+    No() {
+	adjs = new LinkedList<Arco>();
+    }
+}
+class Grafo {
+    No verts[];
+    int nvs, narcos;
+
+    public Grafo(int n) {
+	nvs = n;
+	narcos = 0;
+	verts  = new No[n+1];
+	for (int i = 0 ; i <= n ; i++)
+	    verts[i] = new No();
+        // para vertices numerados de 1 a n (posicao 0 nao vai ser usada)
+    }
+
+    public int num_vertices(){
+	return nvs;
+    }
+
+    public int num_arcos(){
+	return narcos;
+    }
+
+    public LinkedList<Arco> adjs_no(int i) {
+	return verts[i].adjs;
+    }
+
+    public void insert_new_arc(int i, int j, int valor_ij){
+	verts[i].adjs.addFirst(new Arco(j,valor_ij));
+        narcos++;
+    }
+
+    public Arco find_arc(int i, int j){
+	for (Arco adj: adjs_no(i))
+	    if (adj.extremo_final() == j) return adj;
+	return null;
+    }
+}
+
 
 public class CapacidadeTrajeto{
   public static Scanner in = new Scanner(System.in);
@@ -26,52 +95,54 @@ public class CapacidadeTrajeto{
     int ei,ef,t_l,t_c,t_a;
     //-----Leitura L1-L2-L3----------------------
     n=in.nextInt();
-    lmin=in.nextInt(); lmax=in.nextInt();
+    lmin=in.nextInt(); lmax=in.nextInt(); lmx=lmax;
     cmin=in.nextInt(); cmax=in.nextInt();
     amin=in.nextInt();
     origem=in.nextInt(); destino=in.nextInt();
-    //-----criaGrafo-----------------------------
+
     Grafo g = new Grafo(n);
+
     //-----Criação de Rede-----------------------
     ei=in.nextInt();
     while(ei!=-1){
       ef=in.nextInt();
       t_l=in.nextInt(); t_c=in.nextInt(); t_a=in.nextInt();
-      if(t_l>=lmin && t_l<=lmax && t_c>=cmin && t_c<=cmax && t_a>=amin){
-        g.insert_new_arc(ei,ef,t_a);
-        g.insert_new_arc(ef,ei,t_a);
+      //maximos de ramos atingem minorante de intervalos
+      if(t_l>=lmin && t_c>=cmin && t_a>=amin){
+        g.insert_new_arc(ei,ef,t_l);
+        g.insert_new_arc(ef,ei,t_l);
       }
       ei=in.nextInt();
     }
     return g;
   }
   public static void larguraPercursos(Grafo g){
-    boolean o=false,d=false,invalido=false;
-    int i,v1,v2,lmax=0,w;
+    boolean tem_origem=false,tem_destino=false,percurso_invalido=false;
+    int i,valor1,valor2,lmax=lmx,w;
+
     i=in.nextInt();
     while(i!=0){
-      v1=in.nextInt();
+      valor1=in.nextInt();
       for(int j=1;j<i;j++){
-        v2=in.nextInt();
-        if(!invalido){
-          Arco adj = g.find_arc(v1,v2);
+        valor2=in.nextInt();
+        if(!percurso_invalido){
+          Arco adj = g.find_arc(valor1,valor2);
           //Caminho existe/segue restrições impostas
           if(adj!=null){
             w=adj.valor_arco();
-            if(w>lmax)lmax=w;
-            if((v1==origem)&& o==false && d==false) o=true;
-            if((v2==destino) && o&&!d) d=true;
+            if(w<lmax)lmax=w;
+            if((valor1==origem)&& !tem_origem && !tem_destino) tem_origem=true;
+            //j=i-1 sei que o ultimo nó é o destino, pelo que chego a destino
+            if((valor2==destino) && tem_origem &&!tem_destino && j==i-1) tem_destino=true;
           }
-          //------------------------------------------
-          //Caminho n existe/n segue restrições impostas
           else
-            invalido=true;
+            percurso_invalido=true;
         }
-        v1=v2;
+        valor1=valor2;
       }
-      if(invalido || !o || !d)System.out.println("Nao");
+      if(percurso_invalido || !tem_origem || !tem_destino)System.out.println("Nao");
       else System.out.println(lmax);
-      lmax=0; o=false;d=false; invalido=true;
+      lmax=lmx; tem_origem=false;tem_destino=false; percurso_invalido=false;
       i=in.nextInt();
     }
       return;

@@ -1,18 +1,23 @@
 import java.util.*;
-
-
-/*-----------------------------------------------------------------------*\
-|  Exemplo de implementacao de fila de prioridade (por heap de maximo)    |
-|                                                                         |
-|   A.P.Tomas, CC2001 (material para prova pratica), DCC-FCUP, 2017       |
-|   Last modified: 2017.12.18                                             |
-\*-----------------------------------------------------------------------*/
-
-import java.lang.*;
-import java.util.*;
-
-
-
+/* Estado:
+|  MooshackDAA- Vol 2- Prob F - OticaMinimalista (2018)       |
+|     Objetivo:                                               |
+|       -Definir ligações de nos pelo rendimento bruto        |
+|       -Reduzir ao maximo os custos de manutenção global     |
+|       -Maximizar o rendimento líquido total                 |
+|NOTA:os custos de manutenção são inguais para todas as ligaçõ|
+|--------------------------//---------------------------------|
+|     INPUT:                                                  |
+|       L1: #nos #ramos #custo_manutenção_ligação             |
+|       -->Desc de ligações                                   |
+|         -ei ef rendimento bruto                             |
+|    OUTPUT:                                                  |
+|     -"rendimento otimo: x" x-rend otimo de qq rede optima   |
+|     -"impossivel" se n garantir CONECTIVIDADE               |
+|Nota:                                                        |
+| -Usar bfsVisit para ver se o grafo é conexo retornar val==n |
+| -Usar alg de prim para encontra max spinning tree           |
+*/
 
 class Qnode {
     int vert;
@@ -23,7 +28,6 @@ class Qnode {
 	vertkey = key;
     }
 }
-
 class Heapmax {
     private static int posinvalida = 0;
     int sizeMax,size;
@@ -154,23 +158,6 @@ class Heapmax {
 
 
 public class OticaMinimalista{
-  /*
-  OBJETiVo: Definir ligações de nos pelo rendimento bruto
-    --Preservar rede,
-    --Reduzir ao maximo os custos de manutenção global
-    --Maximizar o rendimento líquido total
-    NOTA:os custos de manutenção são inguais para todas as ligações
-  INPUT:
-    - 3 int, #nos, #ligações, #custo de manutenção de cada ligação
-    -#nosLinhas com 3 inteiros: e_inicial, e_final, rendimento bruto
-  OUTPUT:
-    - "rendimento optimo" + valor do rendimento liq de qq rede optima
-    - "impossivel" se n for poss garantir conectividade
-
-    Usar alg de prim para encontra max spinning tree
-    Se o grafo n for conexo é impossível//primeiro verificar
-    Se grafo n conexo o alg fica mt pesado
-  */
   public static Scanner in = new Scanner(System.in);
   public static int INF,custo,n,r,rendimento_maximo=0;
   public static Grafo criaGrafo(int n,int r){
@@ -187,7 +174,6 @@ public class OticaMinimalista{
     }
     return g;
   }
-
   public static int bfsVisit(int s, Grafo g){
     int nosligados;
     boolean[] visitado= new boolean[n+1];
@@ -206,17 +192,10 @@ public class OticaMinimalista{
     }
     return nosligados;
   }
-  public static void isConexo(Grafo g){
-    if(bfsVisit(1,g)!=n) // grafo n isConexo
-      System.out.println("Impossivel");
-    else System.out.println("rendimento otimo: "+maxPrim(g));
-    return;
-  }
   public static int maxPrim(Grafo g){
     int[]dist = new int [n+1];
     int peso=-INF,v; //peso=-INF pos peso raiz = INF
-    boolean[] valido = new boolean[n+1]; //vertice ja está na arvore
-
+    boolean[] valido = new boolean[n+1];
     for(int i=1;i<=n;i++){dist[i]=0; valido[i]=false;}
 
     dist[1]=INF;//raiz
@@ -225,23 +204,29 @@ public class OticaMinimalista{
     while (!Q.isEmpty()) {
       v = Q.extractMax();
       valido[v]=true;
-      peso+=dist[v]; //vertice é ligado a arvore logo o seu peso contribui para o peso total
+      peso+=dist[v]; //vertice é ligado a arvore  peso contribui para o peso total
 
       for(Arco adjs : g.adjs_no(v)){
         int w=adjs.extremo_final();
-        if((!valido[w]) && (adjs.valor_arco()>dist[w])){//usar o arco para ligar a arvore
+        if((!valido[w]) && (adjs.valor_arco()>dist[w])){
+          //usar o arco para ligar a arvore
           dist[w]=adjs.valor_arco();
           Q.increaseKey(w,dist[w]);
         }
       }
     }return peso; //rendimento max
   }
+  public static void isConexo(Grafo g){
+    if(bfsVisit(1,g)!=n) // grafo n isConexo
+      System.out.println("impossivel");
+    else System.out.println("rendimento otimo: "+maxPrim(g));
+    return;
+  }
   public static void main(String[] args) {
     n = in.nextInt();r=in.nextInt();custo=in.nextInt();
     in.nextLine();
     INF = custo*n + 1;
     Grafo g = criaGrafo(n,r);
-
     isConexo(g);
   }
 }

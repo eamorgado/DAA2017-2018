@@ -22,8 +22,6 @@ class Arco {
 	valor = v;
     }
 }
-
-
 class No {
     //int label;
     LinkedList<Arco> adjs;
@@ -32,8 +30,6 @@ class No {
 	adjs = new LinkedList<Arco>();
     }
 }
-
-
 class Grafo {
     No verts[];
     int nvs, narcos;
@@ -71,7 +67,6 @@ class Grafo {
     }
 }
 
-
 class Qnode {
     int vert;
     int vertkey;
@@ -81,7 +76,6 @@ class Qnode {
 	vertkey = key;
     }
 }
-
 class Heapmin {
     private static int posinvalida = 0;
     int sizeMax,size;
@@ -166,7 +160,7 @@ class Heapmin {
 
     private int compare(int i, int j) {
       //nota: se o valor for igual devo imprimir o valor de menor indicador
-	if (a[i].vertkey < a[j].vertkey)
+	/*if (a[i].vertkey < a[j].vertkey)
 	    return -1;
 	if (a[i].vertkey == a[j].vertkey){
       if(a[i].vert < a[j].vert) return -1;
@@ -174,7 +168,12 @@ class Heapmin {
       else return 0;
 
     }
-	return 1;
+	return 1;*/
+  if (a[i].vertkey < a[j].vertkey)
+      return -1;
+  if (a[i].vertkey == a[j].vertkey)
+      return 0;
+  return 1;
     }
 
 
@@ -219,7 +218,7 @@ class Heapmin {
 
 public class NegocioEletronico{
   public static Scanner in = new Scanner(System.in);
-  public static int INF=-1, nos,destino;
+  public static int INF=Integer.MAX_VALUE/2, nos,destino;
 
   public static Grafo criaGrafo(){
     int origem,destino, peso;

@@ -255,7 +255,7 @@ public class NegocioEletronicoII{
         int w=adjs.extremo_final(),peso=adjs.valor_arco();
         if(dist[w]!=INF &&((dist[v]+peso)<dist[w])){
           dist[w]=dist[v]+peso;
-          Q.decreaseKey(w,peso);
+          Q.decreaseKey(w,dist[w]);
         }
       }
       if(v==destino)

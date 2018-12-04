@@ -1,8 +1,0 @@
-BX
-BA
-CDA
-CDB
-CX
-CCA
-CCC
-#

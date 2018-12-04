@@ -1,15 +1,5 @@
 import java.util.*;
 
-/*-------------------------------------------------------------------*\
-|  Definicao de GRAFOS SEM PESOS                                      |
-|     Assume-se que os vertices sao numerados de 1 a |V|.             |
-|                                                                     |
-|   A.P.Tomas, CC2001 (material para prova pratica), DCC-FCUP, 2017   |
-|   Last modified: 2017.12.18                                         |
-\--------------------------------------------------------------------*/
-
-import java.util.LinkedList;
-
 class Arco {
     int no_final;
 
@@ -90,19 +80,19 @@ public class Ilhas{
     //Inicializar-----------------
     pai.add(NOADJ);
     for(i=1;i<=n;i++){
-      visitado[i]=false; //ainda n sei quais são acessíveis a s
+      visitado[i]=false;
       pai.add(NOADJ);
     }
     //-------------------------
-    visitado[s]=true;//como o vou explorar considero como visitado
+    visitado[s]=true;
     pai.set(s,ADJ);
     explorarAdjacencia.add(s);
 
     while(!explorarAdjacencia.isEmpty()){
-      i=explorarAdjacencia.remove(); //vou agoraa explorar adjacências
+      i=explorarAdjacencia.remove();
       adjS=g.adjs_no(i);
       while(!adjS.isEmpty()){
-        w=adjS.removeFirst().extremo_final();//1º adjacente
+        w=adjS.removeFirst().extremo_final();
         if(!visitado[w]){//é acessível a s e ainda n foi encontrado
           explorarAdjacencia.add(w);
           visitado[w]=true;
